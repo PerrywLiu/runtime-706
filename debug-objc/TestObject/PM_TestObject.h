@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PM_TestObject : NSObject
 
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, assign) NSInteger age;
+
 - (void)hello;
 @end
 

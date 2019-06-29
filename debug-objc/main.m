@@ -15,6 +15,7 @@
 #include <mach-o/loader.h>
 #include <mach-o/getsect.h>
 #import "TestObject/PM_TestObject.h"
+#import "TestUnion/TestUnion.h"
 
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Wobjc-root-class"
@@ -135,7 +136,69 @@ int main(int argc, const char * argv[]) {
         
         [testObj hello];
         
+        
+        // isKindOfClass  isMemberOfClass
+        if ([testObj isMemberOfClass:[NSObject class]]) {
+            NSLog(@"isMemberofClass-----NSObject");
+        }
+        else
+        {
+            NSLog(@"isNotMemberofClass-----NSObject");
+        }
+        
+        
+        if ([testObj isKindOfClass:[NSObject class]]) {
+            NSLog(@"isKindeofClass-----NSObject");
+        }
+        else
+        {
+            NSLog(@"isNotKindofClass-----NSObject");
+        }
+        
+        
+        
+        ///methodOfSelector
+//        void(*sayHello) (id,SEL);
+//        int i;
+//        sayHello = (void (*)(id, SEL))[testObj methodSignatureForSelector:@selector(hello)];
+        
+//        NSInvocation
+        
+        
+        
+        ///类型编码
+        char *intEncode = @encode(int);
+        char *voidEncode = @encode(void);
+        char *floatEncode = @encode(float);
+        char *objEncode = @encode(PM_TestObject);
+        char *selEncode = @encode(SEL);
+        char *testObjEncode = @encode(id);
         NSLog(@"asd");
+        
+        
+        //获得属性名字
+        unsigned int propertyCount = 0;
+        id obj = objc_getClass("PM_TestObject");
+        objc_property_t *propertyies = class_copyPropertyList(obj, &propertyCount);
+        NSLog(@"propertyCount:%u",propertyCount);
+        
+        for (unsigned int i = 0; i < propertyCount; ++i) {
+            objc_property_t property = propertyies[i];
+            
+            //返回属性的名字
+            const char *name = property_getName(property);
+            
+            //返回属性的名字、@encode和特征
+            const char *attri = property_getAttributes(property);
+            
+            fprintf(stdout, "%s------------%s\n",name,attri);
+        }
+//        property_getName(objc_property_t property);
+        
+        
+        //测试联合体
+        TestUnion *unionT = [[TestUnion alloc]init];
+        NSLog(@"uinonT:%@",[unionT description]);
     }
     return 0;
 }
